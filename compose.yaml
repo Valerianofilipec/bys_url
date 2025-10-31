@@ -1,0 +1,83 @@
+version: "3"
+
+# include:
+#   - cassandra.yaml
+#   - redis_cache.yaml
+#   - redis_incr.yaml
+
+services:
+  cassandradb:
+    container_name: cassandradb
+    image: "cassandra:5.0.6"
+    ports:
+      - "9042:9042"
+    env_file: ".env"
+    environment:
+      - CASSANDRA_USER=${CASSANDRA_USER:-admin}
+      - CASSANDRA_PASSWORD=${CASSANDRA_PASSWORD:-admin}
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    networks:
+      - cassandra_net
+
+  incr_redis:
+    container_name: incr_redis
+    image: "redis:8.2.2-alpine"
+    ports:
+      - "3379:6379"
+    restart: always
+    networks:
+      - incr_net
+
+  cache_mem:
+    container_name: cache_mem
+    depends_on:
+      - cassandradb
+    image: "redis:8.2.2-alpine"
+    ports:
+      - "4379:6379"
+    restart: always
+    networks:
+      - cache_net
+
+  app:
+    container_name: app
+    depends_on:
+      - cassandradb
+      - incr_redis
+      - cache_mem
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: ".env"
+    networks:
+      - cassandra_net
+      - nginx_net
+      - cache_net
+      - incr_net
+
+  nginx:
+    container_name: nginx
+    image: "nginx:alpine"
+    volumes:
+    - ./templates:/etc/nginx/templates
+    ports:
+    - "8080:80"
+    environment:
+    - NGINX_HOST=${NGINX_HOST:-localhost}
+    - NGINX_PORT=${NGINX_PORT:-80}
+    networks:
+      - nginx_net
+
+networks:
+  cassandra_net:
+    driver: bridge
+  nginx_net:
+    driver: bridge
+  cache_net:
+    driver: bridge
+  incr_net:
+    driver: bridge
+
+volumes:
+  cassandra-data:
