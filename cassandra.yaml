@@ -1,0 +1,51 @@
+networks:
+  cassandraCluster:
+
+
+services:
+  cassandra1:
+    image: "cassandra:5.0.6"
+    container_name: cassandra1
+    hostname: cassandra1
+    networks:
+      - cassandraCluster
+    ports:
+      - "9042:9042"
+    env-files: ".env"
+    environment: &environment
+      CASSANDRA_SEEDS: "cassandra1,cassandra2"
+      CASSANDRA_CLUSTER_NAME: "${CASSANDRA_CLUSTER_NAME:-cassandracluster}"
+      CASSANDRA_DC: DC1
+      CASSANDRA_RACK: RACK1
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      CASSANDRA_NUM_TOKENS: 128
+      JVM_EXTRA_OPTS: "-Xms256M -Xmx512M"
+      mem_limit: 1g
+
+  cassandra2:
+    image: "cassandra:5.0.6"
+    container_name: cassandra2
+    hostname: cassandra2
+    networks:
+      - cassandraCluster
+    ports:
+      - "9043:9042"
+    environment: *environment
+    depends_on:
+      cassandra10:
+        condition: service_started
+    mem_limit: 1g
+
+  cassandra3:
+    image: "cassandra:5.0.6"
+    container_name: cassandra3
+    hostname: cassandra3
+    networks:
+      - cassandraCluster
+    ports:
+      - "9044:9042"
+    environment: *environment
+    depends_on:
+      cassandra20:
+       condition: service_started
+    mem_limit: 1g
