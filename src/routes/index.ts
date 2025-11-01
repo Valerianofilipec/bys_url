@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { url_router } from './url.routes.ts';
+import { url_router } from "./url.routes";
 
 
 const routes = Router()

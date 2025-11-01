@@ -14,15 +14,19 @@
   "author": "Valeriano Filipe",
   "type": "module",
   "main": "index.js",
+  "engines": {
+    "node": "24.11.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --trace-warnings --env-file .env --watch ./src/index.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "npm run build && node dist/index.js"
+    "start": "npm run build && node --import=extensionless/register dist/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "extensionless": "^2.0.2",
     "rimraf": "^6.0.1"
   },
   "devDependencies": {
