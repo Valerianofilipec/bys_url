@@ -11,18 +11,18 @@
     "target": "esnext",
     // For nodejs:
     "module": "nodenext",
-    "lib": ["esnext"],
+    "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
     "types": ["node"],
     // and npm install -D @types/node
 
     // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    //"sourceMap": true,
+    //"declaration": true,
+    //"declarationMap": true,
 
     // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    //"noUncheckedIndexedAccess": true,
+    //"exactOptionalPropertyTypes": true,
 
     // Style Options
     // "noImplicitReturns": true,
@@ -35,10 +35,13 @@
     // Recommended Options
     "strict": true,
     //"jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
+    //"verbatimModuleSyntax": true,
+    //"isolatedModules": true,
+    //"noUncheckedSideEffectImports": true,
+    //"moduleDetection": "force",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "nodenext"
   }
