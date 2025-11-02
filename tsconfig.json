@@ -1,17 +1,25 @@
 {
   "compilerOptions": {
+    /* Language and Environment */
+    "target": "es2020",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */
+    "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
+    /* Modules */
+    "module": "node20",                                /* Specify what module code is generated. */
+    "resolveJsonModule": true,                        /* Enable importing .json files. */
+    "allowJs": true,
     "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
 
-    "module": "es2022",
-    "types": ["node"],
-
-    "strict": true,
-    "alwaysStrict": true,
+    /* Type Checking */
+    "strict": true,                                      /* Enable all strict type-checking options. */
     "removeComments": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
+
+    /* Completeness */
+    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*"],
+  "include":["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
