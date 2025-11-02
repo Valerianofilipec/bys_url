@@ -9,14 +9,14 @@ export default{
 	 * @param res 301 'LongURL'
 	 */
 	async getLongURL(req: Request, res :Response){
-		const id = req.params[0]
+		const {short_url} = req.params
 
 		try {
 			// buscar id no cassandradb
-			const url: string = "https://valerianofc.codes"
-			if (!url)
+			const long_url: string = "https://valerianofc.codes"
+			if (!long_url)
 				res.sendStatus(404)
-			res.redirect(301, url)
+			res.redirect(301, long_url)
 		} catch (error) {
 			console.log(error)
 			res.sendStatus(500)
@@ -33,7 +33,7 @@ export default{
 
 		try {
 			//get incr_number from redis
-			const incr_number = randomInt(999)
+			const incr_number: number = randomInt(999)
 			if(!incr_number)
 				throw new Error("Redis failled")
 

@@ -1,18 +1,12 @@
 import { Router } from "express";
+import url_controller from "../controllers/url.controller";
 
 const url_router = Router()
 
 //	info: in future will use differents domains
 //	e.g. for post url (url.valerianofc.codes/) ans get url (bys.codes/xxxxx)
-url_router.post('/', (req, res)=>{
-	const data = req.body
-	console.log(`received url = ${data.url}`)
-	res.sendStatus(201)
-})
+url_router.post('/', url_controller.createShortURL)
 
-url_router.get('/', (req, res)=>{
-	console.log("get short url")
-	res.redirect(301, 'https://valerianofc.codes')
-})
+url_router.get('/:short_url', url_controller.getLongURL)
 
 export { url_router };
