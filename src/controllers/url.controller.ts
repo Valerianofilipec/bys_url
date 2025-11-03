@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
+import { db } from "../database/db.config";
 import { incr_client } from "../redis/incr.fn";
 import { hash_id } from './helpers/hashid';
+
+const base_url = process.env.SHORT_URL_HOST || 'http://localhost:3000/'
 
 export default{
 	/**
@@ -13,10 +16,11 @@ export default{
 
 		try {
 			// buscar id no cassandradb
-			const long_url: string = "https://valerianofc.codes"
-			if (!long_url)
+			const query = 'SELECT long_url FROM url WHERE shortcode = ?'
+			const result = await db.execute(query, [short_url])
+			if(result && result.rowLength < 1)
 				res.sendStatus(404)
-			res.redirect(301, long_url)
+			res.redirect(301, result.rows[0].long_url)
 		} catch (error) {
 			console.log(error)
 			res.sendStatus(500)
@@ -37,12 +41,11 @@ export default{
 				throw new Error("Redis failled")
 			const short_url = hash_id.encode(incr_number)
 
-			//save new shortn url to cassandradb
-			console.log({
-				id: short_url,
-				url,
-			})
-			res.status(201).send({short_url})
+			const query = 'INSERT INTO url (shortcode, long_url, created_at) VALUES (?,?,toTimeStamp(now()))'
+			const result = await db.execute(query, [short_url, url])
+			if(!result)
+				throw new Error('fail to execute query to the cassandra')
+			res.status(201).send({short_url: base_url+short_url})
 		} catch (error) {
 			console.log(error)
 			res.sendStatus(500)
