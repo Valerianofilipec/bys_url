@@ -25,7 +25,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "hashids": "^2.3.0"
+    "hashids": "^2.3.0",
+    "redis": "^5.9.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

@@ -1,5 +1,5 @@
-import { randomInt } from "crypto";
 import { Request, Response } from "express";
+import { incr_client } from "../redis/incr.fn";
 import { hash_id } from './helpers/hashid';
 
 export default{
@@ -32,15 +32,16 @@ export default{
 		const {url} = req.body
 
 		try {
-			//get incr_number from redis
-			const incr_number: number = randomInt(999)
+			const incr_number = await incr_client.incr("url_id")
 			if(!incr_number)
 				throw new Error("Redis failled")
-
 			const short_url = hash_id.encode(incr_number)
 
 			//save new shortn url to cassandradb
-
+			console.log({
+				id: short_url,
+				url,
+			})
 			res.status(201).send({short_url})
 		} catch (error) {
 			console.log(error)
