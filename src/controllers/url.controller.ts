@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { db } from "../database/db.config";
+import { base_url } from "../env";
 import { incr_client } from "../redis/incr.fn";
 import { hash_id } from './helpers/hashid';
 
-const base_url = process.env.SHORT_URL_HOST || 'http://localhost:3000/'
 
 export default{
 	/**
@@ -15,7 +15,6 @@ export default{
 		const {short_url} = req.params
 
 		try {
-			// buscar id no cassandradb
 			const query = 'SELECT long_url FROM url WHERE shortcode = ?'
 			const result = await db.execute(query, [short_url])
 			if(result && result.rowLength < 1)

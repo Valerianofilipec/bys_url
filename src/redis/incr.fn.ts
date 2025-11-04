@@ -1,7 +1,6 @@
-import "dotenv/config";
 import { createClient } from 'redis';
+import { url } from "../env";
 
-const url = process.env.INCR_URL
 const incr_client = createClient({
   socket: {
     connectTimeout: 10000 // in milliseconds

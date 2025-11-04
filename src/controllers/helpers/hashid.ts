@@ -1,6 +1,6 @@
 import Hashids from "hashids";
+import { salt } from "../../env";
 
-const salt = process.env.HASHID_SALT
 /**
  * Default alphabet [a-z,A-Z,0-9]
  * Hashids(salt, length, alphabet)

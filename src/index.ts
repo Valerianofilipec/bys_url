@@ -1,11 +1,10 @@
 import cors from 'cors'
-import 'dotenv/config'
 import express from 'express'
+import { port } from './env'
 import { incr_client } from './redis/incr.fn'
 import { routes } from "./routes/index"
 
 const app = express()
-const port = process.env.SERVER_PORT
 
 //synchronous fn
 incr_client.connect()
