@@ -1,5 +1,6 @@
 import cors from 'cors'
 import express from 'express'
+import morgan from 'morgan'
 import { port } from './env'
 import { incr_client } from './redis/incr.fn'
 import { routes } from "./routes/index"
@@ -10,6 +11,7 @@ const app = express()
 incr_client.connect()
 
 app.use(cors())
+app.use(morgan('dev'))
 app.use(express.json())
 app.use(routes)
 

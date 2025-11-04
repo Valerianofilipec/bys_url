@@ -17,12 +17,13 @@ export default{
 		try {
 			const query = 'SELECT long_url FROM url WHERE shortcode = ?'
 			const result = await db.execute(query, [short_url])
-			if(result && result.rowLength < 1)
-				res.sendStatus(404)
-			res.redirect(301, result.rows[0].long_url)
+			if(result && result.rowLength > 0){
+				res.redirect(301, result.rows[0].long_url)
+				return
+			}
+			res.status(404).end()
 		} catch (error) {
-			console.log(error)
-			res.sendStatus(500)
+			res.status(500).end()
 		}
 	},
 
@@ -33,7 +34,6 @@ export default{
 	 */
 	async createShortURL(req: Request, res :Response){
 		const {url} = req.body
-
 		try {
 			const incr_number = await incr_client.incr("url_id")
 			if(!incr_number)
@@ -46,8 +46,7 @@ export default{
 				throw new Error('fail to execute query to the cassandra')
 			res.status(201).send({short_url: base_url+short_url})
 		} catch (error) {
-			console.log(error)
-			res.sendStatus(500)
+			res.status(500).end()
 		}
 	}
 }
