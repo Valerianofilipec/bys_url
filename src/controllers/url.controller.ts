@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { db } from "../database/db.config";
+import { db } from "../database/db.connect";
 import { base_url } from "../env";
-import { incr_client } from "../redis/incr.fn";
-import { hash_id } from './helpers/hashid';
+import { incr_client } from "../redis/incr.connect";
+import { hash_id } from '../utils/hashid';
 
 
 export default{
@@ -17,13 +17,11 @@ export default{
 		try {
 			const query = 'SELECT long_url FROM url WHERE shortcode = ?'
 			const result = await db.execute(query, [short_url])
-			if(result && result.rowLength > 0){
-				res.redirect(301, result.rows[0].long_url)
-				return
-			}
-			res.status(404).end()
+			if(result && result.rowLength > 0)
+				return res.redirect(301, result.rows[0].long_url)
+			return res.status(404).end()
 		} catch (error) {
-			res.status(500).end()
+			return res.status(500).end()
 		}
 	},
 
@@ -44,9 +42,9 @@ export default{
 			const result = await db.execute(query, [short_url, url])
 			if(!result)
 				throw new Error('fail to execute query to the cassandra')
-			res.status(201).send({short_url: base_url+short_url})
+			return res.status(201).send({short_url: base_url+short_url})
 		} catch (error) {
-			res.status(500).end()
+			return res.status(500).end()
 		}
 	}
 }

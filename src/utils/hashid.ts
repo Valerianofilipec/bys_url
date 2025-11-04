@@ -1,5 +1,5 @@
 import Hashids from "hashids";
-import { salt } from "../../env";
+import { salt } from "../env";
 
 /**
  * Default alphabet [a-z,A-Z,0-9]

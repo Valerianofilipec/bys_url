@@ -2,7 +2,7 @@ import cors from 'cors'
 import express from 'express'
 import morgan from 'morgan'
 import { port } from './env'
-import { incr_client } from './redis/incr.fn'
+import { incr_client } from './redis/incr.connect'
 import { routes } from "./routes/index"
 
 const app = express()
