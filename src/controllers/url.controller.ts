@@ -16,7 +16,7 @@ export default{
 
 		try {
 			const query = 'SELECT long_url FROM url WHERE shortcode = ?'
-			const result = await db.execute(query, [short_url])
+			const result = await db.execute(query, [short_url],{prepare:true})
 			if(result && result.rowLength > 0)
 				return res.redirect(301, result.rows[0].long_url)
 			return res.status(404).end()
@@ -39,7 +39,7 @@ export default{
 			const short_url = hash_id.encode(incr_number)
 
 			const query = 'INSERT INTO url (shortcode, long_url, created_at) VALUES (?,?,toTimeStamp(now()))'
-			const result = await db.execute(query, [short_url, url])
+			const result = await db.execute(query, [short_url, url], {prepare:true})
 			if(!result)
 				throw new Error('fail to execute query to the cassandra')
 			return res.status(201).send({short_url: base_url+short_url})
